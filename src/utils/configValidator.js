@@ -1,22 +1,21 @@
-import { readFile } from 'fs/promises';
-import { z } from 'zod';
-import { join } from 'path';
 import { log } from './simpleLog.js';
 
-// Define config schema
-const ConfigSchema = z.object({
-  allowedPaths: z.array(z.string())
-});
+let allowedPaths = [];
 
-let config = null;
-
-export async function loadConfig(configPath) {
+export async function loadConfig() {
   try {
-    const path = configPath || join(process.cwd(), 'cli-tool.json');
-    const content = await readFile(path, 'utf-8');
-    const parsedConfig = JSON.parse(content);
-    config = ConfigSchema.parse(parsedConfig);
-    log(`Loaded config with ${config.allowedPaths.length} allowed paths`);
+    // Get paths from command line arguments (skip the first two which are node and script path)
+    const pathArgs = process.argv.slice(2);
+    
+    if (pathArgs.length === 0) {
+      log('Warning: No path arguments provided. Only the current directory will be allowed.');
+      // If no paths are provided, just allow the current directory
+      allowedPaths = [process.cwd()];
+    } else {
+      allowedPaths = pathArgs;
+      log(`Loaded ${allowedPaths.length} allowed paths from command line arguments`);
+      allowedPaths.forEach(path => log(`Allowed path: ${path}`));
+    }
   } catch (error) {
     log(`Failed to load config: ${error instanceof Error ? error.message : 'Unknown error'}`);
     throw error;
@@ -24,18 +23,19 @@ export async function loadConfig(configPath) {
 }
 
 export function isPathAllowed(path) {
-  if (!config) {
-    log('Config not loaded');
+  if (!allowedPaths || allowedPaths.length === 0) {
+    log('No allowed paths configured');
     return false;
   }
 
   const normalizedPath = path.replace(/\\/g, '/');
-  const isAllowed = config.allowedPaths.some(allowedPath => 
+  const isAllowed = allowedPaths.some(allowedPath => 
     normalizedPath.startsWith(allowedPath.replace(/\\/g, '/'))
   );
 
   if (!isAllowed) {
     log(`Path not allowed: ${path}`);
+    log(`Allowed paths: ${JSON.stringify(allowedPaths)}`);
   }
   
   return isAllowed;
