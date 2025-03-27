@@ -1,6 +1,6 @@
 # CLI MCP Server
 
-This repository contains a simplified Model Context Protocol (MCP) server implementation for terminal commands.
+This repository contains a Model Context Protocol (MCP) server implementation for terminal commands.
 
 ## Setup Instructions
 
@@ -16,9 +16,16 @@ npm install
 ```
 
 2. Start the server:
-```bash
-./start-server.sh [allowed-path-1] [allowed-path-2] ...
-```
+   
+   On macOS/Linux:
+   ```bash
+   ./start-server.sh [allowed-path-1] [allowed-path-2] ...
+   ```
+   
+   On Windows:
+   ```bash
+   start-server.bat [allowed-path-1] [allowed-path-2] ...
+   ```
 
 The server accepts directory paths as arguments. Only these directories will be accessible for terminal commands.
 
@@ -47,6 +54,22 @@ Replace `/path/to/cli-mcp-server` with the actual path where this repository is 
 
 Replace `/path/to/allowed/directory1`, `/path/to/allowed/directory2`, etc. with the directories you want to allow Claude to execute terminal commands in.
 
+For Windows, use the batch file instead:
+```json
+{
+  "mcpServers": {
+    "terminal": {
+      "command": "C:\\path\\to\\cli-mcp-server\\start-server.bat",
+      "args": [
+        "C:\\path\\to\\allowed\\directory1",
+        "C:\\path\\to\\allowed\\directory2",
+        "C:\\path\\to\\allowed\\directory3"
+      ]
+    }
+  }
+}
+```
+
 ## Usage
 
 Once configured, Claude can execute terminal commands in the specified directories through the CLI MCP server.
@@ -55,6 +78,12 @@ Example usage in Claude:
 ```
 Please run the following command:
 terminal("ls -la", "/path/to/allowed/directory1")
+```
+
+On Windows, you might use:
+```
+Please run the following command:
+terminal("dir", "C:\\path\\to\\allowed\\directory1")
 ```
 
 ## Security Considerations
