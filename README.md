@@ -1,6 +1,6 @@
 # CLI MCP Server
 
-This repository contains a Model Context Protocol (MCP) server implementation for terminal commands. It allows MCP-compatible AI assistants to execute terminal commands in specified directories.
+This repository contains a Model Context Protocol (MCP) server implementation for executing commands. It allows MCP-compatible AI assistants to execute commands in specified directories.
 
 ## About the Model Context Protocol (MCP)
 
@@ -19,11 +19,11 @@ The Model Context Protocol (MCP) is an open standard developed by Anthropic that
 │   │   └── handlers.js         # MCP request handlers
 │   ├── tools/                  # Tool implementations
 │   │   ├── index.js            # Exports all tools
-│   │   └── terminal/           # Terminal tool module
-│   │       ├── index.js        # Main terminal tool export
-│   │       ├── schema.js       # Terminal tool schema
+│   │   └── terminal/           # Command tool module
+│   │       ├── index.js        # Main command tool export
+│   │       ├── schema.js       # Command tool schema
 │   │       ├── executor.js     # Command execution logic
-│   │       └── worker.js       # Terminal worker implementation
+│   │       └── worker.js       # Command worker implementation
 │   ├── utils/                  # Utility functions
 │   │   ├── logging.js          # Logging utilities
 │   │   └── error.js            # Error handling utilities
@@ -67,7 +67,7 @@ npm install
    start-server.bat [allowed-path-1] [allowed-path-2] ...
    ```
 
-The server accepts directory paths as arguments. Only these directories will be accessible for terminal commands.
+The server accepts directory paths as arguments. Only these directories will be accessible for command execution.
 
 ### Configuration
 
@@ -78,7 +78,7 @@ Update your Claude configuration file (typically located at `~/.config/claude/cl
 ```json
 {
   "mcpServers": {
-    "terminal": {
+    "command": {
       "command": "/path/to/cli-mcp-server/start-server.sh",
       "args": [
         "/path/to/allowed/directory1",
@@ -92,14 +92,14 @@ Update your Claude configuration file (typically located at `~/.config/claude/cl
 
 Replace `/path/to/cli-mcp-server` with the actual path where this repository is located.
 
-Replace `/path/to/allowed/directory1`, `/path/to/allowed/directory2`, etc. with the directories you want to allow Claude to execute terminal commands in.
+Replace `/path/to/allowed/directory1`, `/path/to/allowed/directory2`, etc. with the directories you want to allow Claude to execute commands in.
 
 For Windows, use the batch file instead:
 
 ```json
 {
   "mcpServers": {
-    "terminal": {
+    "command": {
       "command": "C:\\path\\to\\cli-mcp-server\\start-server.bat",
       "args": [
         "C:\\path\\to\\allowed\\directory1",
@@ -113,20 +113,20 @@ For Windows, use the batch file instead:
 
 ## Usage
 
-Once configured, Claude can execute terminal commands in the specified directories through the CLI MCP server.
+Once configured, Claude can execute commands in the specified directories through the CLI MCP server.
 
 Example usage in Claude:
 
 ```
 Please run the following command:
-terminal("ls -la", "/path/to/allowed/directory1")
+command("ls -la", "/path/to/allowed/directory1")
 ```
 
 On Windows, you might use:
 
 ```
 Please run the following command:
-terminal("dir", "C:\\path\\to\\allowed\\directory1")
+command("dir", "C:\\path\\to\\allowed\\directory1")
 ```
 
 ## Development
@@ -139,7 +139,7 @@ terminal("dir", "C:\\path\\to\\allowed\\directory1")
 
 ## Security Considerations
 
-- The server only allows terminal commands to be executed in directories specified as command-line arguments.
+- The server only allows commands to be executed in directories specified as command-line arguments.
 - Be cautious about the directories you expose to Claude, as it will have access to execute commands in these locations.
 - Consider using a dedicated user with limited permissions for running the server.
 - Review the commands executed by Claude to ensure they are safe and appropriate.

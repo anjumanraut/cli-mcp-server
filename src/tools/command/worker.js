@@ -9,7 +9,7 @@ const logMessage = (type, message) => {
     log(logMsg);
 };
 
-logMessage('info', 'Terminal worker initialized');
+logMessage('info', 'Command worker initialized');
 
 parentPort?.on('message', ({ command, workingDir }) => {
     logMessage('info', `Received command: ${command}`);

@@ -1,37 +1,37 @@
-import { executeTerminalCommand } from './executor.js';
-import { TerminalParametersSchema } from './schema.js';
+import { executeCommand } from './executor.js';
+import { CommandParametersSchema, COMMAND_DESCRIPTIONS } from './schema.js';
 import { log } from '../../utils/logging.js';
 import { checkPathAllowed } from '../../config/index.js';
 
 /**
- * Terminal tool implementation for MCP
+ * Command tool implementation for MCP
  */
-export const terminalTool = {
-  name: 'terminal',
-  description: 'Execute terminal commands in a specified directory in macbook',
+export const commandTool = {
+  name: 'command',
+  description: 'Execute commands in a specified directory',
   inputSchema: {
     type: 'object',
     properties: {
       command: {
         type: 'string',
-        description: 'Terminal command to execute'
+        description: COMMAND_DESCRIPTIONS.command
       },
       workingDir: {
         type: 'string',
-        description: 'Working directory for command execution'
+        description: COMMAND_DESCRIPTIONS.workingDir
       }
     },
     required: ['command', 'workingDir']
   },
-  parameters: TerminalParametersSchema,
+  parameters: CommandParametersSchema,
   
   /**
-   * Execute the terminal tool
+   * Execute the command tool
    * @param {Object} params - Tool parameters
    * @returns {Promise<Object>} Tool execution result
    */
   async execute(params) {
-    log(`TERMINAL: Tool Execute - Input params: ${JSON.stringify(params)}`);
+    log(`COMMAND: Tool Execute - Input params: ${JSON.stringify(params)}`);
     
     // Validate working directory against allowed paths
     if (!checkPathAllowed(params.workingDir)) {
@@ -44,7 +44,7 @@ export const terminalTool = {
     }
     
     try {
-      return await executeTerminalCommand(params.command, params.workingDir);
+      return await executeCommand(params.command, params.workingDir);
     } catch (error) {
       return {
         content: [{

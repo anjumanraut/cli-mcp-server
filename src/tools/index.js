@@ -1,4 +1,4 @@
-import { terminalTool } from './terminal/index.js';
+import { commandTool } from './command/index.js';
 
 /**
  * Get all registered tools
@@ -6,6 +6,6 @@ import { terminalTool } from './terminal/index.js';
  */
 export function getRegisteredTools() {
   return [
-    terminalTool
+    commandTool
   ];
 }
