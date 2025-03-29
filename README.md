@@ -53,22 +53,6 @@ The Model Context Protocol (MCP) is an open standard developed by Anthropic that
 npm install
 ```
 
-2. Start the server:
-
-   On macOS/Linux:
-
-   ```bash
-   ./start-server.sh [allowed-path-1] [allowed-path-2] ...
-   ```
-
-   On Windows:
-
-   ```bash
-   start-server.bat [allowed-path-1] [allowed-path-2] ...
-   ```
-
-The server accepts directory paths as arguments. Only these directories will be accessible for command execution.
-
 ### Configuration
 
 To use this server with Claude, you need to update your Claude configuration to include the Command server.
@@ -114,6 +98,8 @@ For Windows, use the batch file instead:
 ## Usage
 
 Once configured, Claude can execute commands in the specified directories through the CLI MCP server.
+
+The server accepts directory paths as arguments. Only these directories will be accessible for command execution.
 
 Example usage in Claude:
 
