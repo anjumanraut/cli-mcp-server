@@ -6,6 +6,36 @@ This repository contains a Model Context Protocol (MCP) server implementation fo
 
 The Model Context Protocol (MCP) is an open standard developed by Anthropic that enables secure, two-way connections between data sources and AI-powered tools. MCP servers expose data and functionality to AI applications, allowing AI models to intelligently retrieve, process, and leverage information across private data sources.
 
+## Tool Schema
+
+This MCP server provides one universal tool called "command" that gives AI agents a broad range of abilities to execute commands in specified directories.
+
+```json
+{
+  "name": "command",
+  "description": "Execute commands in a specified directory",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string",
+        "description": "Command to execute"
+      },
+      "workingDir": {
+        "type": "string",
+        "description": "Working directory for command execution"
+      }
+    },
+    "required": ["command", "workingDir"]
+  }
+}
+```
+
+### Parameters Description
+
+- `command`: The shell command that will be executed (e.g., "ls -la", "dir", "git status")
+- `workingDir`: The directory where the command will be executed. This must be one of the allowed directories specified in the configuration.
+
 ## Project Structure
 
 ```
